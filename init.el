@@ -1,8 +1,12 @@
+(setopt user-mail-address "alexforsale@yahoo.com"
+        user-full-name "Kristian Alexander P")
+
 (cond ((file-directory-p (expand-file-name "Sync/org" (getenv "HOME")))
        (customize-set-variable '+config/org-directory (expand-file-name "Sync/org" (getenv "HOME"))))
       ((string-match-p "microsoft" (shell-command-to-string "uname -a"))
        (if (file-directory-p "/mnt/c/Users/SyncthingServiceAcct/Default Folder/org")
            (customize-set-variable '+config/org-directory "/mnt/c/Users/SyncthingServiceAcct/Default Folder/org"))))
+
 (use-package emacs
   :ensure nil
   :config
