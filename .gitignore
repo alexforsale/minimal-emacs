@@ -1,5 +1,6 @@
 *~
 \#*
+auto-save-list/
 history
 places
 transient
@@ -32,8 +33,6 @@ url/
 modules/
 modules/config-overrides.el
 config.el
-init.el
-early-init.el
 .packages/
 content/
 public/
@@ -44,8 +43,6 @@ package-quickstart*
 session.*
 .local/
 elpaca/
-init.el
-early-init.el
 straight/
 geiser-history.guile
 .mc-lists.el
