@@ -31,7 +31,10 @@ Having always been a [[https://github.com/bbatsov/projectile][projectile]] user,
 - ~C-x p v~ :: =project-vc-dir=.
 - ~C-x p b~ :: =project-switch-to-buffer=.
 *** What I need
-**** =git commit --amend= equivalent
+**** TODO =git commit --amend= equivalent
+:LOGBOOK:
+- State "TODO"       from              [2026-01-31 Sat 18:03]
+:END:
 With /magit/ I can use ~a~ to do an amend without having to have a file checked in.
 ** Base configuration
 This is the perfect time to do a cleanup from my main Emacs [[https://github.com/alexforsale/literate-emacs][configuration]]. The things I have to set immediately:
