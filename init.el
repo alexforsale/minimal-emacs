@@ -17,11 +17,11 @@
   :config
   (transient-mark-mode 1)
   (setopt use-short-answers t
-	  delete-by-moving-to-trash t
-	  load-prefer-newer t
-	  read-buffer-completion-ignore-case t
-	  read-file-name-completion-ignore-case t
-	  inhibit-startup-screen t
+          delete-by-moving-to-trash t
+          load-prefer-newer t
+          read-buffer-completion-ignore-case t
+          read-file-name-completion-ignore-case t
+          inhibit-startup-screen t
           indicate-empty-lines t))
 
 (use-package font-core
@@ -48,7 +48,7 @@
   :ensure nil
   :config
   (setopt minibuffer-visible-completions t
-	  completion-styles '(basic flex partial-completion emacs22)))
+          completion-styles '(basic flex partial-completion emacs22)))
 
 (use-package simple
   :ensure nil
@@ -57,9 +57,9 @@
   (column-number-mode t)
   (line-number-mode t)
   (setopt completion-auto-wrap t
-	  completion-auto-select t
-	  completion-auto-help 'visible
-	  completion-ignore-case t)
+          completion-auto-select t
+          completion-auto-help 'visible
+          completion-ignore-case t)
   (setq-default indent-tabs-mode nil))
 
 (use-package saveplace
@@ -117,17 +117,17 @@
      ("rc\\'" . conf-mode)
      ("\\.\\(?:hex\\|nes\\)\\'" . hexl-mode)))
   (setopt auto-save-visited-interval 10
-	  revert-without-query (list ".")
-	  find-file-suppress-same-file-warnings t
-	  find-file-visit-truename t
-	  confirm-kill-processes nil
-	  version-control t
-	  backup-by-copying t
-	  backup-directory-alist `(("." . ,(expand-file-name ".backup" user-emacs-directory)))
-	  auto-save-list-file-prefix (expand-file-name ".autosave/" user-emacs-directory)
-	  require-final-newline t
-	  find-file-visit-truename t
-	  auto-mode-case-fold nil)
+          revert-without-query (list ".")
+          find-file-suppress-same-file-warnings t
+          find-file-visit-truename t
+          confirm-kill-processes nil
+          version-control t
+          backup-by-copying t
+          backup-directory-alist `(("." . ,(expand-file-name ".backup" user-emacs-directory)))
+          auto-save-list-file-prefix (expand-file-name ".autosave/" user-emacs-directory)
+          require-final-newline t
+          find-file-visit-truename t
+          auto-mode-case-fold nil)
   :hook
   ((prog-mode text-mode) . auto-save-visited-mode))
 
@@ -136,13 +136,13 @@
   :config
   (savehist-mode 1)
   (setopt savehist-additional-variables
-	  '(command-history
-	    kill-ring
-	    register-alist
-	    mark-ring
-	    global-mark-ring
-	    search-ring
-	    regexp-search-ring)))
+          '(command-history
+            kill-ring
+            register-alist
+            mark-ring
+            global-mark-ring
+            search-ring
+            regexp-search-ring)))
 
 (use-package project
   :ensure nil
@@ -178,12 +178,12 @@
   (unless (file-exists-p ispell-personal-dictionary)
     (write-region "" nil ispell-personal-dictionary nil 0))
   (add-to-list 'ispell-dictionary-alist
-             '("en_US" "[[:alpha:]]" "[^[:alpha:]]" "['’]" nil ("-d" "en_US") nil utf-8))
+               '("en_US" "[[:alpha:]]" "[^[:alpha:]]" "['’]" nil ("-d" "en_US") nil utf-8))
   (setopt ispell-program-name (or (executable-find "ispell")
                                   (executable-find "hunspell")
                                   (executable-find "aspell"))
           ispell-dictionary "en_US,id_ID"
-          ispell-personal-dictionary (expand-file-name ".hunspell_personal" (getenv "XDG_DATA_HOME")))
+          ispell-personal-dictionary (expand-file-name ".hunspell_personal" (getenv "XDG_DATA_HOME"))))
 
 (use-package flyspell
   :ensure nil)
