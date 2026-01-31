@@ -66,7 +66,8 @@
 	  version-control t
 	  backup-by-copying t
 	  backup-directory-alist `(("." . ,(expand-file-name ".backup" user-emacs-directory)))
-	  auto-save-list-file-prefix (expand-file-name ".autosave/" user-emacs-directory))
+	  auto-save-list-file-prefix (expand-file-name ".autosave/" user-emacs-directory)
+	  require-final-newline t)
   :hook
   ((prog-mode text-mode) . auto-save-visited-mode))
 
