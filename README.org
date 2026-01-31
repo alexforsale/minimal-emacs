@@ -1,0 +1,29 @@
+#+options: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
+#+options: author:t broken-links:nil c:nil creator:nil
+#+options: d:(not "LOGBOOK") date:t e:t email:nil expand-links:t f:t
+#+options: inline:t num:t p:nil pri:nil prop:nil stat:t tags:t
+#+options: tasks:t tex:t timestamp:t title:t toc:t todo:t |:t
+#+title: README
+#+date: <2026-01-31 Sat>
+#+author: Kristian Alexander P
+#+email: alexforsale@yahoo.com
+#+language: en
+#+select_tags: export
+#+exclude_tags: noexport
+#+creator: Emacs 30.2 (Org mode 9.7.11)
+#+cite_export:
+* My Journey on Understanding Emacs's
+** vc-mode
+As long as I can remember, I have always use [[https://magit.vc/][magit]] in Emacs without even considering the alternative, the built in [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Version-Control.html][vc-mode]]. Vc-mode supports many different version control systems, while /magit/ is a text-based user interface for /git/.
+*** How I use it
+~C-x v d~ (=vc-dir=) is the entry point, invoke this on a project buffer to show the status on the current files, similar to =git status=. The commands I usually use while in this buffers:
+- ~m~ :: mark a file/directory.
+- ~u~ :: unmark a file/directory.
+- ~M~ :: mark all the files with the same state as the current file. If on directory, mark all child files.
+- ~U~ :: unmark all the files with the same state. If on directory, unmark all child files.
+- ~i~ :: =vc-register=, ~git add~.
+- ~P~ :: =vc-push=, ~git push~.
+- ~+~ :: =vc-update=, like ~git pull~.
+- ~=~ :: =vc-diff=, like ~git diff~.
+- ~l~ :: =vc-print-log=, show log on the file on point.
+- ~L~ :: =vc-print-root-log=, show the log (like ~git log --oneline~).
