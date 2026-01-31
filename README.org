@@ -22,6 +22,7 @@ As long as I can remember, I have always use [[https://magit.vc/][magit]] in Ema
 - ~=~ :: =vc-diff=, like ~git diff~.
 - ~l~ :: =vc-print-log=, show log on the file on point.
 - ~L~ :: =vc-print-root-log=, show the log (like ~git log --oneline~).
+Though I would still use /magit/ for more complex git commands.
 ** project.el
 Having always been a [[https://github.com/bbatsov/projectile][projectile]] user, the built in [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Projects.html][project.el]] is a new thing to me, but this is built in Emacs since around version 26. It's time to give it the proper attention.
 *** Keybindings

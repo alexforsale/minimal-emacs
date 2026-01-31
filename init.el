@@ -327,3 +327,9 @@
                '((nix-mode nix-ts-mode)
                  . ("nixd" "--semantic-tokens" "--inlay-hints"
                     :initializationOptions (:nixd (:formatting.command "nixpkgs-fmt"))))))
+
+;;; external packages
+(use-package magit
+  :demand t
+  :config
+  (setopt magit-revision-show-gravatars '("^Author:     " . "^Commit:     ")))
