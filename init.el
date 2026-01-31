@@ -20,7 +20,22 @@
 	  delete-by-moving-to-trash t
 	  load-prefer-newer t
 	  read-buffer-completion-ignore-case t
-	  read-file-name-completion-ignore-case t))
+	  read-file-name-completion-ignore-case t
+	  inhibit-startup-screen t))
+
+(use-package font-core
+  :ensure nil
+  :config
+  (global-font-lock-mode 1))
+
+(use-package winner
+  :ensure nil
+  :init
+  (winner-mode +1)
+  :config
+  (setopt winner-boring-buffers '("*Completions*" "*Compile-Log*" "*inferior-lisp*" "*Fuzzy Completions*"
+                                  "*Apropos*" "*Help*" "*cvs*" "*Buffer List*" "*Ibuffer*"
+                                  "*esh command on file*")))
 
 (use-package completion-preview
   :ensure nil
