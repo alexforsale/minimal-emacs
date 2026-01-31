@@ -158,3 +158,13 @@
   :ensure nil
   :init
   (global-subword-mode 1))
+
+(use-package text-mode
+  :ensure nil
+  :hook (((text-mode prog-mode) . visual-line-mode)
+         (prog-mode . (lambda () (setq-local sentence-end-double-space t))))
+  :config
+  (setq-default sentence-end-double-space nil)
+  (setopt sentence-end-without-period nil)
+  (setopt colon-double-space nil)
+  (setopt adaptive-fill-mode t))
