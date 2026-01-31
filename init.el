@@ -14,7 +14,9 @@
   (transient-mark-mode 1)
   (setopt use-short-answers t
 	  delete-by-moving-to-trash t
-	  load-prefer-newer t))
+	  load-prefer-newer t
+	  read-buffer-completion-ignore-case t
+	  read-file-name-completion-ignore-case t))
 
 (use-package completion-preview
   :ensure nil
