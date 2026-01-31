@@ -58,7 +58,12 @@
   (setopt completion-auto-wrap t
 	  completion-auto-select t
 	  completion-auto-help 'visible
-	  completion-ignore-case t))
+	  completion-ignore-case t)
+  (setq-default indent-tabs-mode nil))
+
+(use-package saveplace
+  :init
+  (save-place-mode 1))
 
 (use-package which-key
   :ensure nil
