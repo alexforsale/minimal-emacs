@@ -1,3 +1,6 @@
+(setopt gc-cons-threshold most-positive-fixnum
+        gc-cons-percentage 0.6)
+
 (customize-set-variable 'custom-file (expand-file-name "custom.el" user-emacs-directory))
 (when (file-exists-p custom-file)
   (load custom-file))
