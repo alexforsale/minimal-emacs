@@ -12,7 +12,28 @@
   :config
   (delete-selection-mode 1)
   (transient-mark-mode 1)
-  (setopt use-short-answers t))
+  (setopt use-short-answers t
+	  delete-by-moving-to-trash t))
+
+(use-package completion-preview
+  :ensure nil
+  :config
+  (global-completion-preview-mode)
+  (push 'org-self-insert-command completion-preview-commands))
+
+(use-package minibuffer
+  :ensure nil
+  :config
+  (setopt minibuffer-visible-completions t
+	  completion-styles '(basic partial-completion flex emacs22)))
+
+(use-package simple
+  :ensure nil
+  :config
+  (setopt completion-auto-wrap t
+	  completion-auto-select t
+	  completion-auto-help 'visible
+	  completion-ignore-case t))
 
 (use-package which-key
   :ensure nil
