@@ -13,7 +13,8 @@
   (delete-selection-mode 1)
   (transient-mark-mode 1)
   (setopt use-short-answers t
-	  delete-by-moving-to-trash t))
+	  delete-by-moving-to-trash t
+	  load-prefer-newer t))
 
 (use-package completion-preview
   :ensure nil
