@@ -53,6 +53,8 @@
   :ensure nil
   :config
   (global-visual-line-mode t)
+  (column-number-mode t)
+  (line-number-mode t)
   (setopt completion-auto-wrap t
 	  completion-auto-select t
 	  completion-auto-help 'visible
