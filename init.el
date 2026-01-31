@@ -153,3 +153,8 @@
   :ensure nil
   :config
   (setopt mouse-yank-at-point t))
+
+(use-package subword
+  :ensure nil
+  :init
+  (global-subword-mode 1))
