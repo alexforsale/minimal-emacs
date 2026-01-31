@@ -21,7 +21,8 @@
 	  load-prefer-newer t
 	  read-buffer-completion-ignore-case t
 	  read-file-name-completion-ignore-case t
-	  inhibit-startup-screen t))
+	  inhibit-startup-screen t
+          indicate-empty-lines t))
 
 (use-package font-core
   :ensure nil
