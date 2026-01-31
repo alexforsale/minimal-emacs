@@ -30,6 +30,7 @@
 (use-package simple
   :ensure nil
   :config
+  (global-visual-line-mode t)
   (setopt completion-auto-wrap t
 	  completion-auto-select t
 	  completion-auto-help 'visible
@@ -60,8 +61,3 @@
 	  backup-directory-alist `(("." . ,(expand-file-name ".backup" user-emacs-directory))))
   :hook
   ((prog-mode text-mode) . auto-save-visited-mode))
-
-(use-package simple
-  :ensure nil
-  :config
-  (global-visual-line-mode t))
