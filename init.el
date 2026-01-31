@@ -7,10 +7,14 @@
        (if (file-directory-p "/mnt/c/Users/SyncthingServiceAcct/Default Folder/org")
            (customize-set-variable '+config/org-directory "/mnt/c/Users/SyncthingServiceAcct/Default Folder/org"))))
 
+(use-package delsel
+  :ensure nil
+  :config
+  (delete-selection-mode 1))
+
 (use-package emacs
   :ensure nil
   :config
-  (delete-selection-mode 1)
   (transient-mark-mode 1)
   (setopt use-short-answers t
 	  delete-by-moving-to-trash t
@@ -61,7 +65,8 @@
 	  confirm-kill-processes nil
 	  version-control t
 	  backup-by-copying t
-	  backup-directory-alist `(("." . ,(expand-file-name ".backup" user-emacs-directory))))
+	  backup-directory-alist `(("." . ,(expand-file-name ".backup" user-emacs-directory)))
+	  auto-save-list-file-prefix (expand-file-name ".autosave/" user-emacs-directory))
   :hook
   ((prog-mode text-mode) . auto-save-visited-mode))
 

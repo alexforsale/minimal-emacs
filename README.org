@@ -35,3 +35,23 @@ Having always been a [[https://github.com/bbatsov/projectile][projectile]] user,
 - ~C-x p D~ :: =project-dired=.
 - ~C-x p v~ :: =project-vc-dir=.
 - ~C-x p b~ :: =project-switch-to-buffer=.
+*** What I need
+**** =git commit --amend= equivalent
+With /magit/ I can use ~a~ to do an amend without having to have a file checked in.
+** Base configuration
+This is the perfect time to do a cleanup from my main Emacs [[https://github.com/alexforsale/literate-emacs][configuration]]. The things I have to set immediately:
+- =delete-selection-mode= :: Replace selection when selection is active. Without this activated, I have to remove the selection first before placing another text.
+- =transient-mark-mode= :: Highlight region, why this is not activated by default?
+- =use-short-answers= :: =y= or =n= instead of =yes= or =no=.
+- =which-key-mode= :: Now that =which-key= is builtin.
+Other sane defaults I recommend:
+- [[https://github.com/magnars/.emacs.d/blob/master/settings/sane-defaults.el][Magnars emacs.d]]
+*** backup files
+The common thing people have when editing files with Emacs is the =*~= files cluttering their working directory, also the autosave files (=#*=). The extreme solution is by not having backup at all (set the variable =make-backup-files= to ~nil~, and the variable =auto-save-default= to ~nil~). But I actually need to have a backup, so my solution is:
+#+begin_SRC emacs-lisp
+  (setopt backup-directory-alist `(("." . ,(expand-file-name ".backup" user-emacs-directory))))
+#+end_SRC
+and
+#+begin_SRC emacs-lisp
+  (setopt auto-save-list-file-prefix (expand-file-name ".autosave/" user-emacs-directory))
+#+end_SRC
