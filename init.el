@@ -50,6 +50,8 @@
 
 (use-package files
   :ensure nil
+  :hook
+  ((prog-mode text-mode) . auto-save-visited-mode)
   :config
   (auto-save-visited-mode 1)
   (nconc
@@ -67,7 +69,8 @@
 	  backup-by-copying t
 	  backup-directory-alist `(("." . ,(expand-file-name ".backup" user-emacs-directory)))
 	  auto-save-list-file-prefix (expand-file-name ".autosave/" user-emacs-directory)
-	  require-final-newline t)
+	  require-final-newline t
+	  find-file-visit-truename t)
   :hook
   ((prog-mode text-mode) . auto-save-visited-mode))
 
