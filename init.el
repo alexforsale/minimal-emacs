@@ -22,7 +22,8 @@
           read-buffer-completion-ignore-case t
           read-file-name-completion-ignore-case t
           inhibit-startup-screen t
-          indicate-empty-lines t))
+          indicate-empty-lines t
+          frame-resize-pixelwise t))
 
 (use-package font-core
   :ensure nil
@@ -169,6 +170,13 @@
   (setopt colon-double-space nil)
   (setopt adaptive-fill-mode t))
 
+(use-package server
+  :ensure nil
+  :config
+  (unless (server-running-p)
+    (server-start))
+  (require 'org-protocol))
+
 ;; spelling
 (use-package ispell
   :ensure nil
@@ -196,7 +204,7 @@
   :hook (org-mode . flyspell-mode)
   :hook ((org-mode . org-indent-mode)
          (org-mode . +config/org-prettify-symbols))
-  :config 
+  :config
   (defun +config/org-mode-keybindings ()
     (global-set-key (kbd "C-c l") #'org-store-link)
     (global-set-key (kbd "C-c a") #'org-agenda)
@@ -303,3 +311,18 @@
       "NOTES(o!)" ; set as notes
       "KILL(k!)") ; Task was cancelled, aborted or is no longer applicable
      )))
+
+;;; `prog-mode'
+(use-package prog-mode
+  :ensure nil
+  :hook
+  (prog-mode . (lambda () (add-hook 'before-save-hook 'delete-trailing-whitespace nil t))))
+
+;;; eglot
+(use-package eglot
+  :ensure nil
+  :config
+  (add-to-list 'eglot-server-programs
+               '((nix-mode nix-ts-mode)
+                 . ("nixd" "--semantic-tokens" "--inlay-hints"
+                    :initializationOptions (:nixd (:formatting.command "nixpkgs-fmt"))))))
