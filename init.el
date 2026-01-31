@@ -148,3 +148,8 @@
   :ensure nil
   :config
   (setopt project-mode-line t))
+
+(use-package mouse
+  :ensure nil
+  :config
+  (setopt mouse-yank-at-point t))
