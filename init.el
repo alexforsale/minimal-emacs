@@ -75,6 +75,19 @@
   :hook
   ((prog-mode text-mode) . auto-save-visited-mode))
 
+(use-package savehist
+  :ensure nil
+  :config
+  (savehist-mode 1)
+  (setopt savehist-additional-variables
+	  '(command-history
+	    kill-ring
+	    register-alist
+	    mark-ring
+	    global-mark-ring
+	    search-ring
+	    regexp-search-ring)))
+
 (use-package project
   :ensure nil
   :config
