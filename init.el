@@ -28,7 +28,7 @@
   :ensure nil
   :config
   (setopt minibuffer-visible-completions t
-	  completion-styles '(basic partial-completion flex emacs22)))
+	  completion-styles '(basic flex partial-completion emacs22)))
 
 (use-package simple
   :ensure nil
