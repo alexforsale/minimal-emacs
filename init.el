@@ -64,3 +64,8 @@
 	  backup-directory-alist `(("." . ,(expand-file-name ".backup" user-emacs-directory))))
   :hook
   ((prog-mode text-mode) . auto-save-visited-mode))
+
+(use-package project
+  :ensure nil
+  :config
+  (setopt project-mode-line t))
