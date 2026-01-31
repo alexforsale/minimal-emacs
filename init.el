@@ -169,9 +169,26 @@
   (setopt colon-double-space nil)
   (setopt adaptive-fill-mode t))
 
+;; spelling
+(use-package ispell
+  :ensure nil
+  :config
+  (ispell-set-spellchecker-params)
+  (ispell-hunspell-add-multi-dic "en_US,id_ID")
+  (unless (file-exists-p ispell-personal-dictionary)
+    (write-region "" nil ispell-personal-dictionary nil 0))
+  (add-to-list 'ispell-dictionary-alist
+             '("en_US" "[[:alpha:]]" "[^[:alpha:]]" "['’]" nil ("-d" "en_US") nil utf-8))
+  (setopt ispell-program-name (or (executable-find "ispell")
+                                  (executable-find "hunspell")
+                                  (executable-find "aspell"))
+          ispell-dictionary "en_US,id_ID"
+          ispell-personal-dictionary (expand-file-name ".hunspell_personal" (getenv "XDG_DATA_HOME")))
+
+(use-package flyspell
+  :ensure nil)
 
 ;;; `org-mode'
-
 (use-package org
   :ensure nil
   :demand t
