@@ -70,7 +70,8 @@
 	  backup-directory-alist `(("." . ,(expand-file-name ".backup" user-emacs-directory)))
 	  auto-save-list-file-prefix (expand-file-name ".autosave/" user-emacs-directory)
 	  require-final-newline t
-	  find-file-visit-truename t)
+	  find-file-visit-truename t
+	  auto-mode-case-fold nil)
   :hook
   ((prog-mode text-mode) . auto-save-visited-mode))
 
