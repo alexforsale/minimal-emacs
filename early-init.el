@@ -21,3 +21,5 @@
   ;; gnu-devel
   (add-to-list 'package-archives '("gnu-devel" . "https://elpa.gnu.org/devel/") t)
   (add-to-list 'package-archives '("nongnu" . "https://elpa.nongnu.org/nongnu/") t))
+
+(setopt use-package-compute-statistics t)
