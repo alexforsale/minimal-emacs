@@ -90,6 +90,14 @@
      "^/\\(?:ssh\\|su\\|sudo\\)?:" ;; ignore tramp/ssh files
      (concat "^" (regexp-quote (or (getenv "XDG_RUNTIME_DIR")
                                    "/run"))))))
+
+(use-package autorevert
+  :ensure nil
+  :config
+  (global-auto-revert-mode t)
+  (setopt auto-revert-interval 60
+          global-auto-revert-non-file-buffers t))
+
 (use-package which-key
   :ensure nil
   :init
