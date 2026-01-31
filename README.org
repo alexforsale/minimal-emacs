@@ -1,8 +1,3 @@
-#+options: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
-#+options: author:t broken-links:nil c:nil creator:nil
-#+options: d:(not "LOGBOOK") date:t e:t email:nil expand-links:t f:t
-#+options: inline:t num:t p:nil pri:nil prop:nil stat:t tags:t
-#+options: tasks:t tex:t timestamp:t title:t toc:t todo:t |:t
 #+title: README
 #+date: <2026-01-31 Sat>
 #+author: Kristian Alexander P
@@ -55,3 +50,4 @@ and
 #+begin_SRC emacs-lisp
   (setopt auto-save-list-file-prefix (expand-file-name ".autosave/" user-emacs-directory))
 #+end_SRC
+** org-mode

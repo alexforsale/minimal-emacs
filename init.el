@@ -168,3 +168,121 @@
   (setopt sentence-end-without-period nil)
   (setopt colon-double-space nil)
   (setopt adaptive-fill-mode t))
+
+
+;;; `org-mode'
+
+(use-package org
+  :ensure nil
+  :demand t
+  :commands org-tempo
+  :hook (org-mode . flyspell-mode)
+  :hook ((org-mode . org-indent-mode)
+         (org-mode . +config/org-prettify-symbols))
+  :config 
+  (defun +config/org-mode-keybindings ()
+    (global-set-key (kbd "C-c l") #'org-store-link)
+    (global-set-key (kbd "C-c a") #'org-agenda)
+    (global-set-key (kbd "C-c c") #'org-capture))
+  (cond ((file-directory-p (expand-file-name "braindump/org" org-directory))
+         (customize-set-variable '+config/org-roam-directory
+                                 (expand-file-name "braindump/org" org-directory)))
+        ((file-directory-p (expand-file-name "Projects/personal/braindump/org" (getenv "HOME")))
+         (customize-set-variable '+config/org-roam-directory
+                                 (expand-file-name "Projects/personal/braindump/org" (getenv "HOME")))))
+  (cond ((file-directory-p (expand-file-name "alexforsale.github.io" org-directory))
+         (customize-set-variable '+config/blog-directory
+                                 (expand-file-name "alexforsale.github.io" org-directory)))
+        ((file-directory-p (expand-file-name "Projects/personal/alexforsale.github.io" (getenv "HOME")))
+         (customize-set-variable '+config/blog-directory
+                                 (expand-file-name "Projects/personal/alexforsale.github.io" (getenv "HOME")))))
+  (modify-syntax-entry ?= "$" org-mode-syntax-table)
+  (modify-syntax-entry ?~ "$" org-mode-syntax-table)
+  (modify-syntax-entry ?_ "$" org-mode-syntax-table)
+  (modify-syntax-entry ?+ "$" org-mode-syntax-table)
+  (modify-syntax-entry ?/ "$" org-mode-syntax-table)
+  (modify-syntax-entry ?* "$" org-mode-syntax-table)
+  (add-to-list 'org-modules 'org-tempo t)
+  (add-to-list 'org-structure-template-alist '("sh" . "src sh"))
+  (add-to-list 'org-structure-template-alist '("co" . "src conf"))
+  (add-to-list 'org-structure-template-alist '("lisp" . "src lisp"))
+  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+  (add-to-list 'org-structure-template-alist '("sc" . "src scheme"))
+  (add-to-list 'org-structure-template-alist '("ts" . "src typescript"))
+  (add-to-list 'org-structure-template-alist '("py" . "src python"))
+  (add-to-list 'org-structure-template-alist '("go" . "src go"))
+  (add-to-list 'org-structure-template-alist '("yaml" . "src yaml"))
+  (add-to-list 'org-structure-template-alist '("js" . "src js"))
+  (add-to-list 'org-structure-template-alist '("json" . "src json"))
+  (add-to-list 'org-structure-template-alist '("n" . "note"))
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (awk . t)
+     (C . t)
+     (css . t)
+     (calc . t)
+     (ditaa . t) ; needs the `ditaa' package
+     (dot . t ) ; `graphviz'
+     (screen . t)
+     (haskell . t)
+     (java . t)
+     (js . t)
+     (latex . t)
+     (lisp . t)
+     (lua . t)
+     (org . t)
+     (perl . t)
+     (plantuml . t)
+     (python .t)
+     (ruby . t)
+     (shell . t)
+     (sed . t)
+     (scheme . t)
+     (sql . t)
+     (sqlite . t)))
+  (setq-default org-use-sub-superscripts '{})
+  (add-to-list 'org-babel-tangle-lang-exts '("js" . "js"))
+  (defun +config/org-prettify-symbols ()
+    (push '("[ ]" . "☐") prettify-symbols-alist)
+    (push '("[X]" . "☑") prettify-symbols-alist)
+    (prettify-symbols-mode t))
+  (require 'org-tempo)
+  :custom
+  (org-highlight-latex-and-related nil)
+  (org-replace-disputed-keys t)
+  (org-indirect-buffer-display 'current-window)
+  (org-enforce-todo-dependencies t)
+  (org-fontify-whole-heading-line t)
+  (org-return-follows-link t)
+  (org-mouse-1-follows-link t)
+  (org-image-actual-width nil)
+  (org-adapt-indentation nil)
+  (org-startup-indented t)
+  (org-link-descriptive nil)
+  (org-log-done 'time)
+  (org-log-refile 'time)
+  (org-log-redeadline 'time)
+  (org-log-reschedule 'time)
+  (org-log-into-drawer t)
+  (org-clone-delete-id t)
+  (org-default-notes-file (expand-file-name "notes.org" org-directory))
+  (org-insert-heading-respect-content nil)
+  (org-pretty-entities t)
+  (org-use-property-inheritance t)
+  (org-priority-highest ?A)
+  (org-priority-lowest ?D)
+  (org-priority-default ?B)
+  (org-todo-keywords
+   '((sequence
+      "TODO(t!)"  ; A task that needs doing & is ready to do
+      "NEXT(n!)"  ; Tasks that can be delayed
+      "PROG(p!)"  ; A task that is in progress
+      "WAIT(w!)"  ; Something external is holding up this task
+      "HOLD(h!)"  ; This task is paused/on hold because of me
+      "|"
+      "DONE(d!)"  ; Task successfully completed
+      "DELEGATED(l!)" ; Task is delegated
+      "NOTES(o!)" ; set as notes
+      "KILL(k!)") ; Task was cancelled, aborted or is no longer applicable
+     )))
