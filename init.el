@@ -313,6 +313,11 @@
       "KILL(k!)") ; Task was cancelled, aborted or is no longer applicable
      )))
 
+(use-package icomplete
+  :ensure nil
+  :config
+  (fido-vertical-mode 1))
+
 ;;; `prog-mode'
 (use-package prog-mode
   :ensure nil
