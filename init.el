@@ -49,7 +49,7 @@
   :ensure nil
   :config
   (setopt minibuffer-visible-completions t
-          completion-styles '(basic flex partial-completion emacs22)))
+          completion-styles '(basic partial-completion flex emacs22)))
 
 (use-package simple
   :ensure nil
@@ -58,8 +58,8 @@
   (column-number-mode t)
   (line-number-mode t)
   (setopt completion-auto-wrap t
-          completion-auto-select t
-          completion-auto-help 'visible
+          completion-auto-select 'second-tab
+          completion-auto-help nil
           completion-ignore-case t)
   (setq-default indent-tabs-mode nil))
 
