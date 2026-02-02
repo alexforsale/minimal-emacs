@@ -26,3 +26,5 @@
   (add-to-list 'package-archives '("nongnu" . "https://elpa.nongnu.org/nongnu/") t))
 
 (setopt use-package-compute-statistics t)
+
+(load-theme 'modus-vivendi-tinted t)
