@@ -417,13 +417,13 @@
   (("C->" . mc/mark-next-like-this)
    ("C-<" . mc/mark-previous-like-this)
    ("C-c C-<" . mc/mark-all-like-this)
-   ("C-S-c C-S-c" . mc/edit-lines))
-  :config
-  (defvar my/mc-repeat-map
-    (let ((map (make-sparse-keymap)))
-      (define-key map ">" #'mc/mark-next-like-this)
-      (define-key map "<" #'mc/mark-previous-like-this)
-      map)
-    "Keymap for my/mc-repeat-map")
-  (put 'mc/mark-next-like-this 'repeat-map 'my/mc-repeat-map)
-  (put 'mc/mark-previous-like-this 'repeat-map 'my/mc-repeat-map))
+   ("C-S-c C-S-c" . mc/edit-lines)))
+
+(defvar my/mc-repeat-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map ">" #'mc/mark-next-like-this)
+    (define-key map "<" #'mc/mark-previous-like-this)
+    map)
+  "Keymap for my/mc-repeat-map")
+(put 'mc/mark-next-like-this 'repeat-map 'my/mc-repeat-map)
+(put 'mc/mark-previous-like-this 'repeat-map 'my/mc-repeat-map)
