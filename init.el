@@ -254,6 +254,12 @@
 (use-package flyspell
   :ensure nil)
 
+;;; `help'
+(use-package help
+  :ensure nil
+  :config
+  (setopt help-window-select t))
+
 ;;; `org-mode'
 (use-package org
   :ensure nil
