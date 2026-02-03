@@ -646,6 +646,9 @@
   :config
   (setopt magit-revision-show-gravatars '("^Author:     " . "^Commit:     ")))
 
+;;; `markdown-mode'
+(use-package markdown-mode)
+
 ;;; nix-ts-mode
 (use-package nix-ts-mode
   :mode "\\.nix\\'"
@@ -669,3 +672,24 @@
   "Keymap for my/mc-repeat-map")
 (put 'mc/mark-next-like-this 'repeat-map 'my/mc-repeat-map)
 (put 'mc/mark-previous-like-this 'repeat-map 'my/mc-repeat-map)
+
+;;; rainbow
+(use-package rainbow-mode
+  :hook (prog-mode . rainbow-mode)
+  :config
+  (setopt rainbow-html-colors-major-mode-list
+  	'(prog-mode conf-mode html-mode css-mode php-mode nxml-mode xml-mode)
+  	rainbow-html-colors t))
+
+(use-package rainbow-identifiers
+  :hook (prog-mode . rainbow-identifiers-mode))
+
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode)
+  :config
+  (setopt rainbow-delimiters-max-face-count 4))
+
+(use-package indent-bars
+  :hook (prog-mode . indent-bars-mode))
+
+(use-package org-rainbow-tags)
