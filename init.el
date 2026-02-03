@@ -410,15 +410,7 @@
   :mode "\\.nix\\'"
   :hook
   ((nix-ts-mode . (lambda () (setq-local tab-width 2)))
-   (nix-ts-mode . eglot-ensure))
-  :config
-  (setopt lsp-nix-nixd-nixos-options-expr
-            (concat "(builtins.getFlake \"/etc/nixos\").nixosConfigurations." system-name ".options")
-            lsp-nix-nixd-home-manager-options-expr
-            (concat "(builtins.getFlake \"/etc/nixos\").homeConfigurations." "\"" user-login-name "@" system-name "\".options")
-            lsp-nix-nixd-nixpkgs-expr "import (builtins.getFlake \"/etc/nixos\").input.nixpkgs { }"
-            lsp-nix-nixd-server-path (executable-find "nixd")
-            lsp-nix-nixd-formatting-command ["nixpkgs-fmt"]))
+   (nix-ts-mode . eglot-ensure)))
 
 (use-package multiple-cursors
   :bind
