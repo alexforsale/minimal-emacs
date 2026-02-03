@@ -1,12 +1,15 @@
+;;; identity
 (setopt user-mail-address "alexforsale@yahoo.com"
         user-full-name "Kristian Alexander P")
 
+;;; `+config/org-directory'
 (cond ((file-directory-p (expand-file-name "Sync/org" (getenv "HOME")))
        (customize-set-variable '+config/org-directory (expand-file-name "Sync/org" (getenv "HOME"))))
       ((string-match-p "microsoft" (shell-command-to-string "uname -a"))
        (if (file-directory-p "/mnt/c/Users/SyncthingServiceAcct/Default Folder/org")
            (customize-set-variable '+config/org-directory "/mnt/c/Users/SyncthingServiceAcct/Default Folder/org"))))
 
+;;; enable `delete-selection-mode'
 (use-package delsel
   :ensure nil
   :config
@@ -332,6 +335,13 @@
                '((nix-mode nix-ts-mode)
                  . ("nixd" "--semantic-tokens" "--inlay-hints"
                     :initializationOptions (:nixd (:formatting.command "nixpkgs-fmt"))))))
+
+;;; python
+(add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
+
+(use-package python-ts-mode
+  :ensure nil
+  :hook (python-ts-mode . eglot-ensure))
 
 ;;; external packages
 (use-package magit
