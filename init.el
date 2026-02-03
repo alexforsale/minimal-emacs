@@ -9,6 +9,52 @@
        (if (file-directory-p "/mnt/c/Users/SyncthingServiceAcct/Default Folder/org")
            (customize-set-variable '+config/org-directory "/mnt/c/Users/SyncthingServiceAcct/Default Folder/org"))))
 
+;;; custom functions
+(defun my/move-line-or-region-internal (arg)
+   (cond
+    ((and mark-active transient-mark-mode)
+     (if (> (point) (mark))
+            (exchange-point-and-mark))
+     (let ((column (current-column))
+              (text (delete-and-extract-region (point) (mark))))
+       (forward-line arg)
+       (move-to-column column t)
+       (set-mark (point))
+       (insert text)
+       (exchange-point-and-mark)
+       (setq deactivate-mark nil)))
+    (t
+     (beginning-of-line)
+     (when (or (> arg 0) (not (bobp)))
+       (forward-line)
+       (when (or (< arg 0) (not (eobp)))
+            (transpose-lines arg))
+       (forward-line -1)))))
+
+(defun my/move-line-or-region-down (arg)
+   "Move region (transient-mark-mode active) or current line
+  arg lines down."
+   (interactive "*p")
+   (my/move-line-or-region-internal arg))
+
+(defun my/move-line-or-region-up (arg)
+   "Move region (transient-mark-mode active) or current line
+  arg lines up."
+   (interactive "*p")
+   (my/move-line-or-region-internal (- arg)))
+
+(global-set-key (kbd "C-c M-n") 'my/move-line-or-region-down)
+(global-set-key (kbd "C-c M-p") 'my/move-line-or-region-up)
+
+(defvar my/move-line-or-region-repeat-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "n" #'my/move-line-or-region-down)
+    (define-key map "p" #'my/move-line-or-region-up)
+    map)
+  "Keymap for my/move-line-or-region-repeat-map")
+(put 'my/move-line-or-region-down 'repeat-map 'my/move-line-or-region-repeat-map)
+(put 'my/move-line-or-region-up 'repeat-map 'my/move-line-or-region-repeat-map)
+
 ;;; enable `delete-selection-mode'
 (use-package delsel
   :ensure nil
@@ -27,6 +73,11 @@
           inhibit-startup-screen t
           indicate-empty-lines t
           frame-resize-pixelwise t))
+
+(use-package repeat
+  :ensure nil
+  :config
+  (repeat-mode 1))
 
 (use-package font-core
   :ensure nil
