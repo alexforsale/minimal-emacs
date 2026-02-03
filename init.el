@@ -384,6 +384,12 @@
                  (add-hook 'before-save-hook 'delete-trailing-whitespace nil t)
                  (electric-pair-local-mode 1))))
 
+(use-package display-line-numbers
+  :ensure nil
+  :hook (prog-mode . display-line-numbers-mode)
+  :config
+  (setopt display-line-numbers-type 'relative))
+
 ;;; eglot
 (use-package eglot
   :ensure nil
