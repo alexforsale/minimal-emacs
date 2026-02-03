@@ -4,10 +4,13 @@
 
 ;;; `+config/org-directory'
 (cond ((file-directory-p (expand-file-name "Sync/org" (getenv "HOME")))
-       (customize-set-variable '+config/org-directory (expand-file-name "Sync/org" (getenv "HOME"))))
+       (customize-set-variable '+config/org-directory (expand-file-name "Sync/org" (getenv "HOME"))
+                               "`+config/org-directory' set on Linux Syncthing folder."))
       ((string-match-p "microsoft" (shell-command-to-string "uname -a"))
        (if (file-directory-p "/mnt/c/Users/SyncthingServiceAcct/Default Folder/org")
-           (customize-set-variable '+config/org-directory "/mnt/c/Users/SyncthingServiceAcct/Default Folder/org"))))
+           (customize-set-variable '+config/org-directory "/mnt/c/Users/SyncthingServiceAcct/Default Folder/org"
+                                   "`+config/org-directory set on Windows.'"))))
+(setopt org-directory +config/org-directory)
 
 ;;; custom functions
 (defun my/move-line-or-region-internal (arg)
@@ -87,6 +90,7 @@
   :config
   (global-font-lock-mode 1))
 
+;;; winner
 (use-package winner
   :ensure nil
   :init
@@ -96,6 +100,7 @@
                                   "*Apropos*" "*Help*" "*cvs*" "*Buffer List*" "*Ibuffer*"
                                   "*esh command on file*")))
 
+;;; completion
 (use-package completion-preview
   :ensure nil
   :config
@@ -120,10 +125,17 @@
           completion-ignore-case t)
   (setq-default indent-tabs-mode nil))
 
+(use-package icomplete
+  :ensure nil
+  :config
+  (fido-vertical-mode 1))
+
+;;; saveplace
 (use-package saveplace
   :init
   (save-place-mode 1))
 
+;;; recentf
 (use-package recentf
   :bind ("C-c f" . recentf)
   :commands recentf-open-files
@@ -150,6 +162,7 @@
      (concat "^" (regexp-quote (or (getenv "XDG_RUNTIME_DIR")
                                    "/run"))))))
 
+;;; autorevert
 (use-package autorevert
   :ensure nil
   :config
@@ -157,11 +170,13 @@
   (setopt auto-revert-interval 60
           global-auto-revert-non-file-buffers t))
 
+;;; which-key
 (use-package which-key
   :ensure nil
   :init
   (which-key-mode 1))
 
+;;; files
 (use-package files
   :ensure nil
   :hook
@@ -189,6 +204,7 @@
   :hook
   ((prog-mode text-mode) . auto-save-visited-mode))
 
+;;; savehist
 (use-package savehist
   :ensure nil
   :config
@@ -202,21 +218,25 @@
             search-ring
             regexp-search-ring)))
 
+;;; project
 (use-package project
   :ensure nil
   :config
   (setopt project-mode-line t))
 
+;;; mouse
 (use-package mouse
   :ensure nil
   :config
   (setopt mouse-yank-at-point t))
 
+;;; subword
 (use-package subword
   :ensure nil
   :init
   (global-subword-mode 1))
 
+;;; text-mode
 (use-package text-mode
   :ensure nil
   :hook (((text-mode prog-mode) . visual-line-mode)
@@ -227,6 +247,7 @@
   (setopt colon-double-space nil)
   (setopt adaptive-fill-mode t))
 
+;;; server
 (use-package server
   :ensure nil
   :config
@@ -269,22 +290,22 @@
   :hook ((org-mode . org-indent-mode)
          (org-mode . +config/org-prettify-symbols))
   :config
-  (defun +config/org-mode-keybindings ()
-    (global-set-key (kbd "C-c l") #'org-store-link)
-    (global-set-key (kbd "C-c a") #'org-agenda)
-    (global-set-key (kbd "C-c c") #'org-capture))
   (cond ((file-directory-p (expand-file-name "braindump/org" org-directory))
          (customize-set-variable '+config/org-roam-directory
-                                 (expand-file-name "braindump/org" org-directory)))
+                                 (expand-file-name "braindump/org" org-directory)
+                                 "`+config/org-roam-directory' set inside `org-directory'"))
         ((file-directory-p (expand-file-name "Projects/personal/braindump/org" (getenv "HOME")))
          (customize-set-variable '+config/org-roam-directory
-                                 (expand-file-name "Projects/personal/braindump/org" (getenv "HOME")))))
+                                 (expand-file-name "Projects/personal/braindump/org" (getenv "HOME"))
+                                 "`+config/org-roam-directory' set inside personal projects directory")))
   (cond ((file-directory-p (expand-file-name "alexforsale.github.io" org-directory))
          (customize-set-variable '+config/blog-directory
-                                 (expand-file-name "alexforsale.github.io" org-directory)))
+                                 (expand-file-name "alexforsale.github.io" org-directory)
+                                 "`+config/blog-directory' set inside `org-directory'"))
         ((file-directory-p (expand-file-name "Projects/personal/alexforsale.github.io" (getenv "HOME")))
          (customize-set-variable '+config/blog-directory
-                                 (expand-file-name "Projects/personal/alexforsale.github.io" (getenv "HOME")))))
+                                 (expand-file-name "Projects/personal/alexforsale.github.io" (getenv "HOME"))
+                                 "`+config/blog-directory' set inside personal projects directory")))
   (modify-syntax-entry ?= "$" org-mode-syntax-table)
   (modify-syntax-entry ?~ "$" org-mode-syntax-table)
   (modify-syntax-entry ?_ "$" org-mode-syntax-table)
@@ -376,10 +397,211 @@
       "KILL(k!)") ; Task was cancelled, aborted or is no longer applicable
      )))
 
-(use-package icomplete
+(global-set-key (kbd "C-c l") #'org-store-link)
+(global-set-key (kbd "C-c a") #'org-agenda)
+(global-set-key (kbd "C-c c") #'org-capture)
+
+(use-package org-entities
   :ensure nil
   :config
-  (fido-vertical-mode 1))
+  (setopt org-entities-user
+          '(("flat"  "\\flat" nil "" "" "266D" "♭")
+            ("sharp" "\\sharp" nil "" "" "266F" "♯"))))
+
+(use-package org-faces
+  :ensure nil
+  :custom
+  (org-fontify-quote-and-verse-blocks t))
+
+(use-package org-archive
+  :ensure nil
+  :after org
+  :custom
+  (org-archive-tag "archive")
+  (org-archive-subtree-save-file-p t)
+  (org-archive-mark-done t)
+  (org-archive-reversed-order t)
+  (org-archive-location (concat (expand-file-name "archives.org" org-directory) "::datetree/* Archived Tasks")))
+
+(use-package org-capture
+  :after org
+  :ensure nil
+  :demand t
+  :config
+  (org-capture-put :kill-buffer t)
+  (setq org-capture-templates ;; this is the default from `doom'.
+        `(("i" "Inbox - Goes Here first!" entry
+           (file+headline ,(expand-file-name "inbox.org" org-directory) "Inbox")
+           "** %?\n%i\n%a" :prepend t)
+          ;; ("r" "Request" entry (file+headline ,(expand-file-name "inbox.org" org-directory) "Request")
+          ;;  (file ,(expand-file-name "request.template" org-directory)))
+          ("l" "Links" entry
+           (file+headline ,(expand-file-name "links.org" org-directory) "Links")))))
+
+(use-package org-refile
+  :ensure nil
+  :after org
+  :hook (org-after-refile-insert . save-buffer)
+  :custom
+  (org-refile-targets
+   `((,(expand-file-name "projects.org" org-directory) :maxlevel . 1)
+     (,(expand-file-name "notes.org" org-directory) :maxlevel . 1)
+     (,(expand-file-name "routines.org" org-directory) :maxlevel . 3)
+     (,(expand-file-name "personal.org" org-directory) :maxlevel . 1)))
+  (org-refile-use-outline-path 't)
+  (org-outline-path-complete-in-steps nil))
+
+(use-package org-fold
+  :ensure nil
+  :custom
+  (org-fold-catch-invisible-edits 'smart))
+
+(use-package org-id
+    :ensure nil
+    :after org
+    :custom
+    (org-id-locations-file-relative t)
+    (org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id))
+
+(use-package org-num
+    :ensure nil
+    :after org
+    :custom
+    (org-num-face '(:inherit org-special-keyword :underline nil :weight bold))
+    (org-num-skip-tags '("noexport" "nonum")))
+
+(use-package org-crypt ; built-in
+    :ensure nil
+    :after org
+    :commands org-encrypt-entries org-encrypt-entry org-decrypt-entries org-decrypt-entry
+    ;;:hook (org-reveal-start . org-decrypt-entry)
+    :preface
+    ;; org-crypt falls back to CRYPTKEY property then `epa-file-encrypt-to', which
+    ;; is a better default than the empty string `org-crypt-key' defaults to.
+    (defvar org-crypt-key nil)
+    (with-eval-after-load 'org
+      (add-to-list 'org-tags-exclude-from-inheritance "crypt"))
+    :config
+    (setopt epa-file-encrypt-to "alexforsale@yahoo.com"))
+
+(use-package org-attach
+    :ensure nil
+    :after org
+    :commands (org-attach-new
+               org-attach-open
+               org-attach-open-in-emacs
+               org-attach-reveal-in-emacs
+               org-attach-url
+               org-attach-set-directory
+               org-attach-sync)
+    :config
+    (unless org-attach-id-dir
+      (setq-default org-attach-id-dir (expand-file-name ".attach/" org-directory)))
+    (with-eval-after-load 'projectile
+      (add-to-list 'projectile-globally-ignored-directories org-attach-id-dir))
+    :custom
+    (org-attach-auto-tag nil))
+
+(use-package org-agenda
+    :ensure nil
+    :after org
+    :custom
+    (org-agenda-breadcrumbs-separator " → ")
+    (org-agenda-files (list (concat org-directory "/")))
+    (org-agenda-file-regexp "\\`[^.].*\\.org\\|[0-9]+$\\'")
+    (org-agenda-include-inactive-timestamps t)
+    (org-agenda-window-setup 'only-window)
+    (org-stuck-projects '("+{project*}-killed-Archives/-DONE-KILL-DELEGATED"
+                          ("TODO" "NEXT" "IDEA" "PROG")
+                          nil ""))
+    :config
+    (with-eval-after-load 'evil
+      (evil-set-initial-state #'org-agenda-mode 'normal)
+      (evil-define-key 'normal org-agenda-mode-map "q" 'org-agenda-quit))
+    (setopt org-agenda-custom-commands
+          `(("w" "Work Agenda and all TODOs"
+             ((agenda ""
+                      ((org-agenda-span 1)
+                       (org-agenda-start-on-weekday t)
+                       (org-agenda-block-separator nil)
+                       (org-agenda-use-time-grid t)
+                       (org-agenda-day-face-function (lambda (date) 'org-agenda-date))
+                       (org-agenda-format-date "%A %-e %B %Y")
+                       (org-agenda-overriding-header "\nToday\n")))
+              (tags-todo "TODO=\"TODO\"|\"NEXT\""
+                         ((org-agenda-block-separator nil)
+                          (org-agenda-skip-function '(org-agenda-skip-if-todo 'nottodo 'done))
+                          (org-agenda-use-time-grid nil)
+                          (org-agenda-overriding-header "\nIncomplete\n")))
+              (agenda ""
+                      ((org-agenda-span 7)
+                       (org-agenda-start-on-weekday 1)
+                       (org-agenda-block-separator nil)
+                       (org-agenda-use-time-grid nil)
+                       (org-agenda-overriding-header "\nWeekly\n"))))
+             ((org-agenda-tag-filter-preset '("-personal" "-home"))))
+            ("h" "Home Agenda and all personal TODOs"
+             ((agenda ""
+                      ((org-agenda-span 1)
+                       (org-agenda-start-on-weekday t)
+                       (org-agenda-block-separator nil)
+                       (org-agenda-use-time-grid t)
+                       (org-agenda-day-face-function (lambda (date) 'org-agenda-date))
+                       (org-agenda-format-date "%A %-e %B %Y")
+                       (org-agenda-overriding-header "\nToday\n")))
+              (tags-todo "TODO=\"TODO\"|\"NEXT\""
+                         ((org-agenda-block-separator nil)
+                          (org-agenda-skip-function '(org-agenda-skip-if-todo 'nottodo 'done))
+                          (org-agenda-use-time-grid nil)
+                          (org-agenda-overriding-header "\nIncomplete\n")))
+              (agenda ""
+                      ((org-agenda-span 7)
+                       (org-agenda-start-on-weekday 1)
+                       (org-agenda-block-separator nil)
+                       (org-agenda-use-time-grid nil)
+                       (org-agenda-overriding-header "\nWeekly\n"))))
+             ;; ((org-agenda-tag-filter-preset '("+personal")))
+             ))))
+
+(use-package org-clock
+    :ensure nil
+    :after org
+    :commands org-clock-save
+    :hook (kill-emacs . org-clock-save)
+    :custom
+    (org-persist 'history)
+    (org-clock-in-resume t)
+    (org-clock-out-remove-zero-time-clocks t)
+    (org-clock-history-length 20)
+    (org-show-notification-handler "notify-send")
+    (org-agenda-skip-scheduled-if-deadline-is-shown t)
+    :config
+    (org-clock-persistence-insinuate))
+
+(use-package org-timer
+    :ensure nil
+    :config
+    (setopt org-timer-format "Timer :: %s"))
+
+(use-package org-contrib)
+
+(use-package org-eldoc
+  :ensure nil
+  :after org org-contrib
+  :config
+  (puthash "org" #'ignore org-eldoc-local-functions-cache)
+  ;;(puthash "plantuml" #'ignore org-eldoc-local-functions-cache)
+  (puthash "python" #'python-eldoc-function org-eldoc-local-functions-cache)
+  :custom
+  (org-eldoc-breadcrumb-separator " → "))
+
+(use-package pdf-tools
+  :config
+  (pdf-tools-install)
+  (setq-default pdf-view-display-size 'fit-width)
+  (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward)
+  :custom
+  (pdf-annot-activate-created-annotations t "automatically annotate highlights"))
 
 ;;; `prog-mode'
 ;;; delete trailing whitespace and enable `electric-pair-local-mode'
@@ -424,12 +646,14 @@
   :config
   (setopt magit-revision-show-gravatars '("^Author:     " . "^Commit:     ")))
 
+;;; nix-ts-mode
 (use-package nix-ts-mode
   :mode "\\.nix\\'"
   :hook
   ((nix-ts-mode . (lambda () (setq-local tab-width 2)))
    (nix-ts-mode . eglot-ensure)))
 
+;;; multiple-cursors
 (use-package multiple-cursors
   :bind
   (("C->" . mc/mark-next-like-this)
