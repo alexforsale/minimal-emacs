@@ -61,6 +61,7 @@
   :config
   (delete-selection-mode 1))
 
+;;; base
 (use-package emacs
   :ensure nil
   :config
@@ -74,11 +75,13 @@
           indicate-empty-lines t
           frame-resize-pixelwise t))
 
+;;; repeat
 (use-package repeat
   :ensure nil
   :config
   (repeat-mode 1))
 
+;;; enable `global-font-lock-mode'
 (use-package font-core
   :ensure nil
   :config
@@ -373,10 +376,13 @@
   (fido-vertical-mode 1))
 
 ;;; `prog-mode'
+;;; delete trailing whitespace and enable `electric-pair-local-mode'
 (use-package prog-mode
   :ensure nil
   :hook
-  (prog-mode . (lambda () (add-hook 'before-save-hook 'delete-trailing-whitespace nil t))))
+  (prog-mode . (lambda ()
+                 (add-hook 'before-save-hook 'delete-trailing-whitespace nil t)
+                 (electric-pair-local-mode 1))))
 
 ;;; eglot
 (use-package eglot
