@@ -412,6 +412,12 @@
   :ensure nil
   :hook (python-ts-mode . eglot-ensure))
 
+;;; make-mode
+(use-package make-mode
+  :ensure nil
+  :config
+  (add-hook 'makefile-mode-hook 'indent-tabs-mode))
+
 ;;; external packages
 (use-package magit
   :demand t
