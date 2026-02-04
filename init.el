@@ -710,11 +710,24 @@
 (use-package yaml-ts-mode
   :hook (yaml-ts-mode . (lambda () (define-key yaml-ts-mode-map (kbd "RET") 'newline-and-indent)
                           (indent-bars-mode 1)
-                          (setq-local tab-width 2))))
+                          (setq-local tab-width 2)
+                          (eglot-ensure))))
 
 (use-package yaml-pro
-  :hook (yaml-ts-mode . yaml-pro-ts-mode))
+  :hook ((yaml-ts-mode . yaml-pro-ts-mode)
+         (yaml-ts-mode . eglot-ensure)))
 
+;;; `toml-ts-mode'
+(use-package toml-ts-mode
+  :ensure nil
+  :mode "\\.toml\\'"
+  :hook (toml-ts-mode . eglot-ensure)
+  :hook (toml-ts-mode . (lambda ()
+                          (setq-local tab-width 2)
+                          (setq-local require-final-newline t)))
+  :config
+  (add-to-list 'eglot-server-programs
+               '(toml-ts-mode . ("taplo" "lsp" "stdio"))))
 
 ;;; multiple-cursors
 (use-package multiple-cursors
