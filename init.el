@@ -641,10 +641,44 @@
   (add-hook 'makefile-mode-hook 'indent-tabs-mode))
 
 ;;; external packages
+;;; `magit'
 (use-package magit
   :demand t
   :config
   (setopt magit-revision-show-gravatars '("^Author:     " . "^Commit:     ")))
+
+;;; `ox-hugo'
+(use-package ox-hugo
+    :ensure t
+    :if (executable-find "hugo")
+    :after ox)
+
+(defun my/create-blog-capture-file ()
+  "Create a subdirectory and `org-mode' file under `+config/blog-directory'."
+  (interactive)
+  (let* ((name (read-string "slug: "))
+		 (content-dir (expand-file-name "content-org/" +config/blog-directory)))
+	(unless (file-directory-p (expand-file-name name content-dir))
+	  (make-directory (expand-file-name name content-dir)))
+	(expand-file-name (concat name ".org") (expand-file-name name content-dir))))
+
+(with-eval-after-load 'ox-hugo
+  (add-to-list 'org-capture-templates
+	       '("h" "Hugo Post" plain
+		 (file my/create-blog-capture-file)
+		 "#+options: ':nil -:nil ^:nil num:nil toc:nil
+#+author: %n
+#+title: %^{Title}
+#+description:
+#+date: %t
+#+hugo_categories: %^{Categories|misc|desktop|emacs|learning}
+#+hugo_tags: %^{Tags}
+#+hugo_section: posts
+#+hugo_base_dir: ../../
+#+language: en
+#+startup: inlineimages
+
+* %?" :jump-to-captured t)))
 
 ;;; `markdown-mode'
 (use-package markdown-mode)
@@ -693,3 +727,106 @@
   :hook (prog-mode . indent-bars-mode))
 
 (use-package org-rainbow-tags)
+
+;;; `notmuch'
+(use-package notmuch
+  :if (executable-find "notmuch")
+  :ensure t
+  :defer t
+  :commands (notmuch)
+  :hook
+  (message-setup . mml-secure-sign-pgpmime)
+  :config
+  (global-set-key (kbd "<XF86Mail>") 'notmuch)
+  (setq notmuch-fcc-dirs nil
+	notmuch-search-result-format
+	'(("date" . "%12s ")
+	  ("count" . "%-7s ")
+	  ("authors" . "%-30s ")
+	  ("subject" . "%-72s ")
+	  ("tags" . "(%s)"))
+	notmuch-tag-formats
+	'(("unread"
+	   (propertize tag 'face 'notmuch-tag-unread))
+	  ("flagged"
+	   (propertize tag 'face 'notmuch-tag-flagged)
+	   (notmuch-tag-format-image-data tag
+					  (notmuch-tag-star-icon))))
+	notmuch-tagging-keys
+	'(("a" notmuch-archive-tags "Archive")
+	  ("u" notmuch-show-mark-read-tags "Mark read")
+	  ("f" ("+flagged") "Flag")
+	  ("s" ("+spam" "-inbox") "Mark as spam")
+	  ("d" ("+deleted" "-inbox") "Delete"))
+	notmuch-saved-searches
+	'((:name "flagged" :query "tag:flagged" :key "f")
+	  (:name "archive" :query "tag:archive" :key "i")
+	  (:name "inbox" :query "tag:inbox" :key "i")
+	  (:name "sent" :query "tag:sent" :key "s")
+	  (:name "drafts"  :query "tag:draft" :key "d")
+	  (:name "all mail" :query "*" :key "a")
+	  (:name "unread" :query "tag:unread" :key "u")
+	  (:name "Today"
+		 :query "date:today AND NOT tag:spam AND NOT tag:bulk"
+		 :key "T"
+		 :search-type 'tree
+		 :sort-order 'newest-first)
+	  (:name "This Week"
+		 :query "date:weeks AND NOT tag:spam AND NOT tag:bulk"
+		 :key "W"
+		 :search-type 'tree
+		 :sort-order 'newest-first)
+	  (:name "This Month"
+		 :query "date:months AND NOT tag:spam AND NOT tag:bulk"
+		 :key "M"
+		 :search-type 'tree
+		 :sort-order 'newest-first)
+	  (:name "flagged"
+		 :query "tag:flagged AND NOT tag:spam AND NOT tag:bulk"
+		 :key "f"
+		 :search-type 'tree
+		 :sort-order 'newest-first)
+	  (:name "spam" :query "tag:spam"))
+	notmuch-archive-tags '("-inbox" "-unread" "+archive"))
+  (setq-default notmuch-search-oldest-first nil)
+  (if (executable-find "gpg2")
+      (setopt notmuch-crypto-gpg-program "gpg2")
+    (setopt notmuch-crypto-gpg-program "gpg"))
+  (setopt notmuch-crypto-process-mime t
+	  mml-secure-openpgp-sign-with-sender t)
+  (define-key notmuch-show-mode-map "S"
+	      (lambda ()
+		"Mark message as spam"
+		(interactive)
+		(notmuch-show-tag (list +spam -new)))))
+
+(use-package message
+  :ensure nil
+  :if (executable-find "notmuch")
+  :custom
+  (message-directory (expand-file-name ".mail" (getenv "HOME")))
+  (message-sendmail-envelope-from 'header))
+
+(use-package sendmail
+  :ensure nil
+  :if (executable-find "notmuch")
+  :custom
+  (mail-specify-envelope-from t)
+  (mail-envelope-from 'header)
+  (send-mail-function 'sendmail-send-it)
+  (sendmail-program (executable-find "msmtp")))
+
+(use-package notmuch-addr
+  :after notmuch
+  :config
+  (notmuch-addr-setup))
+
+(use-package ol-notmuch
+  :after notmuch)
+
+(use-package notmuch-indicator
+  :after notmuch
+  :config
+  (setopt notmuch-indicator-args
+          '((:terms "tag:unread and tag:inbox" :label "U" :label-face success)))
+  (notmuch-indicator-mode))
