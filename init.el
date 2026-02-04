@@ -618,6 +618,16 @@
   :config
   (setopt display-line-numbers-type 'relative))
 
+(use-package sh-script
+    :ensure nil
+    :config
+    (setopt sh-indentation 2))
+
+(use-package executable
+    :ensure nil
+    :hook
+    (after-save . executable-make-buffer-file-executable-if-script-p))
+
 ;;; eglot
 (use-package eglot
   :ensure nil
@@ -734,6 +744,7 @@
   :ensure t
   :defer t
   :commands (notmuch)
+  :bind ("C-c m" . notmuch)
   :hook
   (message-setup . mml-secure-sign-pgpmime)
   :config
