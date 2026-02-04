@@ -700,6 +700,22 @@
   ((nix-ts-mode . (lambda () (setq-local tab-width 2)))
    (nix-ts-mode . eglot-ensure)))
 
+;;; `yaml-pro'
+(use-package yaml-mode
+  :ensure nil
+  :mode "\\.yaml\\'"
+  :mode "\\.yml\\'")
+(add-to-list 'major-mode-remap-alist '(yaml-mode . yaml-ts-mode))
+
+(use-package yaml-ts-mode
+  :hook (yaml-ts-mode . (lambda () (define-key yaml-ts-mode-map (kbd "RET") 'newline-and-indent)
+                          (indent-bars-mode 1)
+                          (setq-local tab-width 2))))
+
+(use-package yaml-pro
+  :hook (yaml-ts-mode . yaml-pro-ts-mode))
+
+
 ;;; multiple-cursors
 (use-package multiple-cursors
   :bind
