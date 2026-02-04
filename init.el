@@ -729,6 +729,13 @@
   (add-to-list 'eglot-server-programs
                '(toml-ts-mode . ("taplo" "lsp" "stdio"))))
 
+;;; `json-ts-mode'
+(add-to-list 'major-mode-remap-alist '(js-json-mode . json-ts-mode))
+
+(use-package json-ts-mode
+  :ensure nil
+  :hook (json-ts-mode . eglot-ensure))
+
 ;;; multiple-cursors
 (use-package multiple-cursors
   :bind
