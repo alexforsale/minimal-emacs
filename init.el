@@ -659,7 +659,6 @@
 
 ;;; `ox-hugo'
 (use-package ox-hugo
-    :ensure t
     :if (executable-find "hugo")
     :after ox)
 
@@ -777,7 +776,6 @@
 ;;; `notmuch'
 (use-package notmuch
   :if (executable-find "notmuch")
-  :ensure t
   :defer t
   :commands (notmuch)
   :bind ("C-c m" . notmuch)
