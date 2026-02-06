@@ -659,7 +659,6 @@
 
 ;;; `ox-hugo'
 (use-package ox-hugo
-    :if (executable-find "hugo")
     :after ox)
 
 (defun my/create-blog-capture-file ()
@@ -671,11 +670,10 @@
 	  (make-directory (expand-file-name name content-dir)))
 	(expand-file-name (concat name ".org") (expand-file-name name content-dir))))
 
-(with-eval-after-load 'ox-hugo
-  (add-to-list 'org-capture-templates
-	       '("h" "Hugo Post" plain
-		 (file my/create-blog-capture-file)
-		 "#+options: ':nil -:nil ^:nil num:nil toc:nil
+(add-to-list 'org-capture-templates
+	     '("h" "Hugo Post" plain
+	       (file my/create-blog-capture-file)
+	       "#+options: ':nil -:nil ^:nil num:nil toc:nil
 #+author: %n
 #+title: %^{Title}
 #+description:
@@ -687,7 +685,7 @@
 #+language: en
 #+startup: inlineimages
 
-* %?" :jump-to-captured t)))
+* %?" :jump-to-captured t))
 
 ;;; `markdown-mode'
 (use-package markdown-mode)
