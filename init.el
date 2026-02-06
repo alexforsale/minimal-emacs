@@ -875,5 +875,10 @@
   :after notmuch
   :config
   (setopt notmuch-indicator-args
-          '((:terms "tag:unread and tag:inbox" :label "U" :label-face success)))
+          '((:terms "tag:unread and tag:inbox" :label "U" :label-face success))
+          notmuch-indicator-notmuch-config-file
+          (or (when (file-exists-p (expand-file-name ".notmuch-config" (getenv "HOME")))
+                (file-exists-p (expand-file-name ".notmuch-config" (getenv "HOME"))))
+              (when (file-exists-p (getenv "NOTMUCH_CONFIG"))
+                (getenv "NOTMUCH_CONFIG"))))
   (notmuch-indicator-mode))
