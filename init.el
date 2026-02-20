@@ -78,6 +78,13 @@
           indicate-empty-lines t
           frame-resize-pixelwise t))
 
+;;; tramp
+(use-package tramp
+  :ensure nil
+  :config
+  (setopt tramp-remote-path
+          (append tramp-remote-path
+ 	          '(tramp-own-remote-path))))
 ;;; repeat
 (use-package repeat
   :ensure nil
