@@ -67,13 +67,19 @@
 ;;; base
 (use-package emacs
   :ensure nil
+  :custom
+  (context-menu-mode t)
+  (enable-recursive-minibuffers t)
+  (read-extended-command-predicate #'command-completion-default-include-p)
+  (minibuffer-prompt-properties
+   '(read-only t cursor-intangible t face minibuffer-prompt))
   :config
   (transient-mark-mode 1)
   (setopt use-short-answers t
           delete-by-moving-to-trash t
           load-prefer-newer t
-          read-buffer-completion-ignore-case t
-          read-file-name-completion-ignore-case t
+          ;; read-buffer-completion-ignore-case t
+          ;; read-file-name-completion-ignore-case t
           inhibit-startup-screen t
           indicate-empty-lines t
           frame-resize-pixelwise t))
@@ -108,17 +114,17 @@
                                   "*esh command on file*")))
 
 ;;; completion
-(use-package completion-preview
-  :ensure nil
-  :config
-  (global-completion-preview-mode)
-  (push 'org-self-insert-command completion-preview-commands))
+;; (use-package completion-preview
+;;   :ensure nil
+;;   :config
+;;   (global-completion-preview-mode)
+;;   (push 'org-self-insert-command completion-preview-commands))
 
-(use-package minibuffer
-  :ensure nil
-  :config
-  (setopt minibuffer-visible-completions t
-          completion-styles '(basic partial-completion flex emacs22)))
+;; (use-package minibuffer
+;;   :ensure nil
+;;   :config
+;;   (setopt minibuffer-visible-completions t
+;;           completion-styles '(basic partial-completion flex emacs22)))
 
 (use-package simple
   :ensure nil
@@ -126,16 +132,16 @@
   (global-visual-line-mode t)
   (column-number-mode t)
   (line-number-mode t)
-  (setopt completion-auto-wrap t
-          completion-auto-select 'second-tab
-          completion-auto-help nil
-          completion-ignore-case t)
+  ;; (setopt completion-auto-wrap t
+  ;;         completion-auto-select 'second-tab
+  ;;         completion-auto-help nil
+  ;;         completion-ignore-case t)
   (setq-default indent-tabs-mode nil))
 
-(use-package icomplete
-  :ensure nil
-  :config
-  (fido-vertical-mode 1))
+;; (use-package icomplete
+;;   :ensure nil
+;;   :config
+;;   (fido-vertical-mode 1))
 
 ;;; saveplace
 (use-package saveplace
@@ -639,6 +645,7 @@
 (use-package eglot
   :ensure nil
   :config
+  (setopt eglot-autoshutdown t)
   (add-to-list 'eglot-server-programs
                '((nix-mode nix-ts-mode)
                  . ("nixd" "--semantic-tokens" "--inlay-hints"
@@ -658,6 +665,217 @@
   (add-hook 'makefile-mode-hook 'indent-tabs-mode))
 
 ;;; external packages
+
+;;; `vertico'
+(use-package vertico
+  :hook
+  (rfn-eshadow-update-overlay . vertico-directory-tidy)
+  :custom
+  ;; (vertico-scroll-margin 0) ;; Different scroll margin
+  (vertico-count 10) ;; Show more candidates
+  (vertico-resize nil) ;; Grow and shrink the Vertico minibuffer
+  (vertico-cycle t) ;; Enable cycling for `vertico-next/previous'
+  :config
+  (advice-add #'tmm-add-prompt :after #'minibuffer-hide-completions)
+  (keymap-set vertico-map "?" #'minibuffer-completion-help)
+  :init
+  (vertico-mode))
+
+;;; `vertico-directory'
+(use-package vertico-directory
+  :after vertico
+  :ensure nil
+  ;; More convenient directory navigation commands
+  :bind (:map vertico-map
+              ("RET" . vertico-directory-enter)
+              ("DEL" . vertico-directory-delete-char)
+              ("M-DEL" . vertico-directory-delete-word))
+  ;; Tidy shadowed file names
+  :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
+
+;;; `vertico-quick'
+(use-package vertico-quick
+  :after vertico
+  :ensure nil
+  :bind (:map vertico-map
+              ("M-q" . vertico-quick-insert)
+              ("C-q" . vertico-quick-exit)))
+
+;;; `marginalia'
+(use-package marginalia
+  :bind (:map minibuffer-local-map
+              ("M-A" . marginalia-cycle))
+  :init
+  (marginalia-mode))
+
+;;; `orderless'
+(use-package orderless
+  :init
+  (setopt completion-styles '(orderless basic substring partial-completion)
+          completion-category-defaults nil
+          completion-category-overrides
+          '((file (styles orderless partial-completion)))
+          orderless-component-separator #'orderless-escapable-split-on-space))
+
+;;; `consult'
+(use-package consult
+  :bind (("C-c M-x" . consult-mode-command)
+         ("C-c h" . consult-history)
+         ("C-c k" . consult-kmacro)
+         ("C-c m" . consult-man)
+         ("C-c i" . consult-info)
+         ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
+         ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
+         ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
+         ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
+         ("C-x t b" . consult-buffer-other-tab)    ;; orig. switch-to-buffer-other-tab
+         ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
+         ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
+                  ("M-#" . consult-register-load)
+         ("M-'" . consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
+         ("C-M-#" . consult-register)
+         ;; Other custom bindings
+         ("M-y" . consult-yank-pop)                ;; orig. yank-pop
+         ;; M-g bindings in `goto-map'
+         ("M-g e" . consult-compile-error)
+         ("M-g r" . consult-grep-match)
+         ("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
+         ("M-g g" . consult-goto-line)             ;; orig. goto-line
+         ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
+         ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
+         ("M-g m" . consult-mark)
+         ("M-g k" . consult-global-mark)
+         ("M-g i" . consult-imenu)
+         ("M-g I" . consult-imenu-multi)
+         ;; M-s bindings in `search-map'
+         ("M-s d" . consult-find)                  ;; Alternative: consult-fd
+         ("M-s c" . consult-locate)
+         ("M-s g" . consult-grep)
+         ("M-s G" . consult-git-grep)
+         ("M-s r" . consult-ripgrep)
+         ("M-s l" . consult-line)
+         ("M-s L" . consult-line-multi)
+         ("M-s k" . consult-keep-lines)
+         ("M-s u" . consult-focus-lines)
+         ;; Isearch integration
+         ("M-s e" . consult-isearch-history)
+         :map isearch-mode-map
+         ("M-e" . consult-isearch-history)         ;; orig. isearch-edit-string
+         ("M-s e" . consult-isearch-history)       ;; orig. isearch-edit-string
+         ("M-s l" . consult-line)                  ;; needed by consult-line to detect isearch
+         ("M-s L" . consult-line-multi)            ;; needed by consult-line to detect isearch
+         ;; Minibuffer history
+         :map minibuffer-local-map
+         ("M-s" . consult-history)                 ;; orig. next-matching-history-element
+         ("M-r" . consult-history))
+  :hook (completion-list-mode . consult-preview-at-point-mode)
+  :init
+  (setopt register-preview-delay 0.5
+          register-preview-function #'consult-register-format)
+  (advice-add #'register-preview :override #'consult-register-window)
+  (setopt xref-show-xrefs-function #'consult-xref
+          xref-show-definitions-function #'consult-xref)
+  :config
+  (setopt consult-narrow-key "<"
+          consult-line-numbers-widen t
+          consult-async-min-input 2
+          consult-async-refresh-delay  0.15
+          consult-async-input-throttle 0.2
+          consult-async-input-debounce 0.1)
+  (keymap-set isearch-mode-map "M-e" #'consult-isearch-history)
+  (keymap-set isearch-mode-map "M-l" #'consult-line)
+  (keymap-set isearch-mode-map "M-L" #'consult-line-multi)
+
+  (keymap-set minibuffer-local-map "M-s" #'consult-history)
+  (keymap-set minibuffer-local-map "M-r" #'consult-history)
+
+  (global-set-key [remap Info-search] 'consult-info)
+  (global-set-key [remap yank-pop] 'consult-yank-pop)
+  (global-set-key [remap bookmark-jump] 'consult-bookmark)
+  (global-set-key [remap goto-line] 'consult-goto-line)
+  (global-set-key [remap imenu] 'consult-imenu)
+  (global-set-key [remap locate] 'consult-locate)
+  (global-set-key [remap load-theme] 'consult-theme)
+  (global-set-key [remap man] 'consult-man)
+  (global-set-key [remap recentf-open-files] 'consult-recent-file)
+  (global-set-key [remap switch-to-buffer] 'consult-buffer)
+  (global-set-key [remap switch-to-buffer-other-frame] 'consult-buffer-other-frame)
+  (global-set-key [remap switch-to-buffer-other-window] 'consult-buffer-other-window))
+
+;;; `corfu'
+(use-package corfu
+  :init
+  (global-corfu-mode)
+  :custom
+  (corfu-cycle t)
+  (corfu-auto t)
+  (corfu-auto-delay 0.18)
+  (corfu-auto-prefix 2)
+  (corfu-quit-no-match 'separator)
+  (corfu-preselect 'prompt)
+  (corfu-count 16)
+  (corfu-max-width 120)
+  (corfu-on-exact-match nil)
+  (corfu-quit-no-match corfu-quit-at-boundary)
+  (completion-cycle-threshold 3)
+  (text-mode-ispell-word-completion nil)
+  :config
+  (defun corfu-enable-always-in-minibuffer ()
+    "Enable Corfu in the minibuffer if Vertico/Mct are not active."
+    (unless (or (bound-and-true-p mct--active)
+                (bound-and-true-p vertico--input)
+                (eq (current-local-map) read-passwd-map))
+      ;; (setq-local corfu-auto nil) ;; Enable/disable auto completion
+      (setq-local corfu-echo-delay nil ;; Disable automatic echo and popup
+                  corfu-popupinfo-delay nil)
+      (corfu-mode 1)))
+  (add-hook 'minibuffer-setup-hook #'corfu-enable-always-in-minibuffer 1))
+
+;;; `cape'
+(use-package cape
+  :bind (("C-c p p" . completion-at-point) ;; capf
+         ("C-c p t" . complete-tag)        ;; etags
+         ("C-c p d" . cape-dabbrev))       ;; or dabbrev-completion
+  :hook
+  (prog-mode . +corfu-add-cape-file-h)
+  ((org-mode markdown-mode) . +corfu-add-cape-elisp-block-h)
+  :config
+  (setopt cape-dabbrev-check-other-buffers t)
+  (defun +corfu-add-cape-file-h ()
+    (add-hook 'completion-at-point-functions #'cape-file -10 t))
+  (defun +corfu-add-cape-elisp-block-h ()
+    (add-hook 'completion-at-point-functions #'cape-elisp-block 0 t))
+  (advice-add #'comint-completion-at-point :around #'cape-wrap-nonexclusive)
+  (advice-add #'pcomplete-completions-at-point :around #'cape-wrap-nonexclusive)
+  :init
+  ;; Add extra completion sources
+  (add-to-list 'completion-at-point-functions #'cape-file)
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev))
+
+;;; `embark'
+(use-package embark
+  :bind
+  (("C-." . embark-act)         ;; pick some comfortable binding
+   ("C-;" . embark-dwim)        ;; good alternative: M-.
+   ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
+  :init
+  (setopt prefix-help-command #'embark-prefix-help-command)
+  :config
+    (global-set-key (kbd "C-.") #'embark-act)
+    (global-set-key (kbd "C-;") #'embark-dwim)
+    (global-set-key (kbd "C-h b") #'embark-bindings)
+    (setopt which-key-use-C-h-commands nil
+  	  prefix-help-command #'embark-prefix-help-command)
+    (add-to-list 'display-buffer-alist
+                 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                   nil
+                   (window-parameters (mode-line-format . none)))))
+
+;;; `embark-consult'
+(use-package embark-consult
+    :hook
+    (embark-collect-mode . consult-preview-at-point-mode))
+
 ;;; `magit'
 (use-package magit
   :demand t
