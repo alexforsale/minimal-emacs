@@ -1108,3 +1108,8 @@
               (when (file-exists-p (getenv "NOTMUCH_CONFIG"))
                 (getenv "NOTMUCH_CONFIG"))))
   (notmuch-indicator-mode))
+
+(use-package gruvbox-theme
+  :ensure nil
+  :config
+  (load-theme 'gruvbox t nil))
