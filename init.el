@@ -647,9 +647,14 @@
   :config
   (setopt eglot-autoshutdown t)
   (add-to-list 'eglot-server-programs
-               '((nix-mode nix-ts-mode)
+               `((nix-mode nix-ts-mode)
                  . ("nixd" "--semantic-tokens" "--inlay-hints"
-                    :initializationOptions (:nixd (:formatting.command "nixpkgs-fmt"))))))
+                    :initializationOptions
+                    (:nixd.nixpkgs.expr "import (builtins.getFlake \"/etc/nixos\").input.nixpkgs { }"
+                                        :nixd.formatting.command ["nixpkgs-fmt"]
+                                        :nixd.options.nixos.expr ,(concat "(builtins.getFlake \"/etc/nixos\").nixosConfigurations." system-name ".options")
+                                        :nixd.options.home_manager.expr ,(concat "(builtins.getFlake \"/etc/nixos\").homeConfigurations." "\"" user-login-name "@" system-name "\".options")
+                                        :diagnostic.suppress ["sema-extra-with"])))))
 
 ;;; python
 (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
