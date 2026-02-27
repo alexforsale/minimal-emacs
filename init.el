@@ -651,7 +651,7 @@
                  . ("nixd" "--semantic-tokens" "--inlay-hints"
                     :initializationOptions
                     (:nixd.nixpkgs.expr "import (builtins.getFlake \"/etc/nixos\").input.nixpkgs { }"
-                                        :nixd.formatting.command ["nixpkgs-fmt"]
+                                        :nixd.formatting.command ["nixfmt"]
                                         :nixd.options.nixos.expr ,(concat "(builtins.getFlake \"/etc/nixos\").nixosConfigurations." system-name ".options")
                                         :nixd.options.home_manager.expr ,(concat "(builtins.getFlake \"/etc/nixos\").homeConfigurations." "\"" user-login-name "@" system-name "\".options")
                                         :diagnostic.suppress ["sema-extra-with"])))))
