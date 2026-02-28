@@ -1,3 +1,6 @@
+;;; early-init --- `Emacs' Initialization file -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
 (setopt gc-cons-threshold most-positive-fixnum
         gc-cons-percentage 0.6)
 
@@ -28,3 +31,7 @@
 (setopt use-package-compute-statistics t)
 
 (load-theme 'modus-vivendi-tinted t)
+
+;;; early-init --- `Emacs' Initialization file -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:

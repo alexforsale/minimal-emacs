@@ -1,3 +1,7 @@
+;;; init --- `Emacs' Initialization file -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
+
 ;;; identity
 (setopt user-mail-address "alexforsale@yahoo.com"
         user-full-name "Kristian Alexander P")
@@ -35,14 +39,12 @@
        (forward-line -1)))))
 
 (defun my/move-line-or-region-down (arg)
-   "Move region (transient-mark-mode active) or current line
-  arg lines down."
+   "Move region (transient-mark-mode active) or current line ARG lines down."
    (interactive "*p")
    (my/move-line-or-region-internal arg))
 
 (defun my/move-line-or-region-up (arg)
-   "Move region (transient-mark-mode active) or current line
-  arg lines up."
+   "Move region (transient-mark-mode active) or current line ARG lines up."
    (interactive "*p")
    (my/move-line-or-region-internal (- arg)))
 
@@ -1135,3 +1137,6 @@
   :ensure nil
   :config
   (load-theme 'gruvbox t nil))
+
+(provide 'init)
+;;; init.el ends here
