@@ -1138,5 +1138,44 @@
   :config
   (load-theme 'gruvbox t nil))
 
+(use-package org-roam
+  :if (not (equal 'windows-nt system-type))
+  :after org
+  :custom
+  (org-roam-directory +config/org-roam-directory)
+  (org-roam-complete-everywhere t)
+  (org-roam-capture-templates
+   '(("d" "default" plain
+      "#+author: %n\n#+date: %t\n#+description: \n#+hugo_base_dir: ..\n#+hugo_section: posts\n#+hugo_categories: other\n#+property: header-args :exports both\n#+hugo_tags: \n%?"
+      :if-new (file+head "%<%Y-%m-%d_%H-%M-%S>-${slug}.org" "#+title: ${title}\n")
+      :unnarrowed t)
+     ("p" "programming" plain
+      "#+author: %n\n#+date: %t\n#+description: \n#+hugo_base_dir: ..\n#+hugo_section: posts\n#+hugo_categories: programming\n#+property: header-args :exports both\n#+hugo_tags: \n%?"
+      :if-new (file+head "%<%Y-%m-%d_%H-%M-%S>-${slug}.org" "#+title: ${title}\n")
+      :unnarrowed t)
+     ("t" "tech" plain
+      "#+author: %n\n#+date: %t\n#+description: \n#+hugo_base_dir: ..\n#+hugo_section: posts\n#+hugo_categories: tech\n#+property: header-args :exports both\n#+hugo_tags: \n%?"
+      :if-new (file+head "%<%Y-%m-%d_%H-%M-%S>-${slug}.org" "#+title: ${title}\n")
+      :unnarrowed t)))
+  (org-roam-capture-ref-templates
+   '(("r" "ref" plain "#+author: %n\n#+date: %t\n#+description: \n#+hugo_base_dir: ..\n#+hugo_section: posts\n#+hugo_categories: reference\n#+property: header-args :exports both\n#+hugo_tags: \n%?\n* Links\n- %l" :target (file+head "${slug}.org" "#+title: ${title}")
+      :unnarrowed t)))
+  :config
+  (org-roam-setup)
+  (org-roam-db-autosync-mode)
+  (require 'org-roam-protocol))
+
+(use-package org-roam-ui
+  :after org-roam ;; or :after org
+  ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+  ;;         a hookable mode anymore, you're advised to pick something yourself
+  ;;         if you don't care about startup time, use
+  ;;  :hook (after-init . org-roam-ui-mode)
+  :config
+  (setopt org-roam-ui-sync-theme t
+          org-roam-ui-follow t
+          org-roam-ui-update-on-save t
+          org-roam-ui-open-on-start t))
+
 (provide 'init)
 ;;; init.el ends here
