@@ -1102,6 +1102,7 @@
   :if (executable-find "notmuch")
   :custom
   (message-directory (expand-file-name ".mail" (getenv "HOME")))
+  (message-auto-save-directory (expand-file-name "gmail/drafts" message-directory))
   (message-sendmail-envelope-from 'header))
 
 (use-package sendmail
