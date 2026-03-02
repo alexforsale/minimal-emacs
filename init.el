@@ -48,8 +48,8 @@
    (interactive "*p")
    (my/move-line-or-region-internal (- arg)))
 
-(global-set-key (kbd "C-c M-n") 'my/move-line-or-region-down)
-(global-set-key (kbd "C-c M-p") 'my/move-line-or-region-up)
+(keymap-global-set "C-c M-n" '("Move line or region down" . my/move-line-or-region-down))
+(keymap-global-set "C-c M-p" '("Move line or region up" . my/move-line-or-region-up))
 
 (defvar my/move-line-or-region-repeat-map
   (let ((map (make-sparse-keymap)))
@@ -412,9 +412,9 @@
       "KILL(k!)") ; Task was cancelled, aborted or is no longer applicable
      )))
 
-(global-set-key (kbd "C-c l") #'org-store-link)
-(global-set-key (kbd "C-c a") #'org-agenda)
-(global-set-key (kbd "C-c c") #'org-capture)
+(keymap-global-set "C-c l" #'("Org store link" . org-store-link))
+(keymap-global-set "C-c a" #'("Org agenda" . org-agenda))
+(keymap-global-set  "C-c c" #'("Org capture" . org-capture))
 
 (use-package org-entities
   :ensure nil
@@ -796,18 +796,18 @@
   (keymap-set minibuffer-local-map "M-s" #'consult-history)
   (keymap-set minibuffer-local-map "M-r" #'consult-history)
 
-  (global-set-key [remap Info-search] 'consult-info)
-  (global-set-key [remap yank-pop] 'consult-yank-pop)
-  (global-set-key [remap bookmark-jump] 'consult-bookmark)
-  (global-set-key [remap goto-line] 'consult-goto-line)
-  (global-set-key [remap imenu] 'consult-imenu)
-  (global-set-key [remap locate] 'consult-locate)
-  (global-set-key [remap load-theme] 'consult-theme)
-  (global-set-key [remap man] 'consult-man)
-  (global-set-key [remap recentf-open-files] 'consult-recent-file)
-  (global-set-key [remap switch-to-buffer] 'consult-buffer)
-  (global-set-key [remap switch-to-buffer-other-frame] 'consult-buffer-other-frame)
-  (global-set-key [remap switch-to-buffer-other-window] 'consult-buffer-other-window))
+  (keymap-global-set "<remap> <Info-search>" '("Consult info" . consult-info))
+  (keymap-global-set "<remap> <yank-pop>" '("Consult yank-pop" . consult-yank-pop))
+  (keymap-global-set "<remap> <bookmark-jump>" '("Consult bookmark" . consult-bookmark))
+  (keymap-global-set "<remap> <goto-line>" '("Consult goto-line" . consult-goto-line))
+  (keymap-global-set "<remap> <imenu>" '("Consult imenu" . consult-imenu))
+  (keymap-global-set "<remap> <locate>" '("Consult locate". consult-locate))
+  (keymap-global-set "<remap> <load-theme>" '("Consult theme" . consult-theme))
+  (keymap-global-set "<remap> <man>" '("Consult man" . consult-man))
+  (keymap-global-set "<remap> <recentf-open-files>" '("Consult recent-file" . consult-recent-file))
+  (keymap-global-set "<remap> <switch-to-buffer>" '("Consult buffer" . consult-buffer))
+  (keymap-global-set "<remap> <switch-to-buffer-other-frame>" '("Consult buffer other frame" . consult-buffer-other-frame))
+  (keymap-global-set "<remap> <switch-to-buffer-other-window>" '("Consult buffer other window" . consult-buffer-other-window)))
 
 ;;; `corfu'
 (use-package corfu
@@ -861,22 +861,18 @@
 
 ;;; `embark'
 (use-package embark
-  :bind
-  (("C-." . embark-act)         ;; pick some comfortable binding
-   ("C-;" . embark-dwim)        ;; good alternative: M-.
-   ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
   :init
   (setopt prefix-help-command #'embark-prefix-help-command)
   :config
-    (global-set-key (kbd "C-.") #'embark-act)
-    (global-set-key (kbd "C-;") #'embark-dwim)
-    (global-set-key (kbd "C-h b") #'embark-bindings)
-    (setopt which-key-use-C-h-commands nil
+  (keymap-global-set "C-." '("Embark act" . embark-act))
+  (keymap-global-set "C-;" '("Embark DWIM" . embark-dwim))
+  (keymap-global-set "C-h b" '("Embark bindings" . embark-bindings))
+  (setopt which-key-use-C-h-commands nil
   	  prefix-help-command #'embark-prefix-help-command)
-    (add-to-list 'display-buffer-alist
-                 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-                   nil
-                   (window-parameters (mode-line-format . none)))))
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none)))))
 
 ;;; `embark-consult'
 (use-package embark-consult
@@ -1034,7 +1030,7 @@
   :hook
   (message-setup . mml-secure-sign-pgpmime)
   :config
-  (global-set-key (kbd "<XF86Mail>") 'notmuch)
+  (keymap-global-set "<XF86Mail>" '("Notmuch" . notmuch))
   (setq notmuch-fcc-dirs nil
 	notmuch-search-result-format
 	'(("date" . "%12s ")
