@@ -13,7 +13,10 @@
       ((string-match-p "microsoft" (shell-command-to-string "uname -a"))
        (if (file-directory-p "/mnt/c/Users/SyncthingServiceAcct/Default Folder/org")
            (customize-set-variable '+config/org-directory "/mnt/c/Users/SyncthingServiceAcct/Default Folder/org"
-                                   "`+config/org-directory set on Windows.'"))))
+                                   "`+config/org-directory set on Windows.'")
+	 (if (file-directory-p "/mnt/c/Users/alexforsale/Sync/org")
+	     (customize-set-variable '+config/org-directory "/mnt/c/Users/alexforsale/Sync/Org"
+				     "`+config/org-directory set on Windows.'")))))
 (setopt org-directory +config/org-directory)
 
 ;;; custom functions
