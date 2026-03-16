@@ -668,6 +668,22 @@
   :ensure nil
   :hook (python-ts-mode . eglot-ensure))
 
+;;; lua
+(add-to-list 'major-mode-remap-alist '(lua-mode . lua-ts-mode))
+
+(use-package lua-ts-mode
+  :ensure nil
+  :mode "\\.lua\\'"
+  :hook (lua-ts-mode . eglot-ensure)
+  :config
+  (add-to-list 'eglot-server-programs
+               '(lua-ts-mode . ("lua-language-server"
+                                :initializationOptions
+                                (:settings
+                                 (:Lua
+                                  (:diagnostics
+                                   (:globals ["vim"]))))))))
+
 ;;; make-mode
 (use-package make-mode
   :ensure nil
