@@ -692,6 +692,11 @@
 
 ;;; external packages
 
+;;; jinja2
+(use-package jinja2-mode
+  :ensure nil
+  :mode "\\.j2\\'"
+  :hook (jinja2-mode . (lambda () (setq-local delete-trailing-lines nil))))
 ;;; `vertico'
 (use-package vertico
   :hook
